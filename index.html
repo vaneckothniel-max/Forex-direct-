@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Forex en direct</title>
+<meta name="description" content="Marchés Forex en temps réel : cours des principales paires, graphique interactif et calendrier économique. Contact WhatsApp.">
+<meta property="og:title" content="Forex en direct">
+<meta property="og:description" content="Cours des principales paires, graphique interactif et calendrier économique, avec contact WhatsApp.">
+<meta name="color-scheme" content="light dark">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap">
+<style>
+/* Mise en page : une colonne centrée, bandeau de cours en tête, bouton WhatsApp flottant en bas à droite. */
+:root{
+  --bg:#F2F5F8; --surface:#FFFFFF; --surface2:#E9EEF4; --ink:#13202C; --muted:#586878; --line:#D8E0E8;
+  --accent:#1D4ED8; --accent-ink:#FFFFFF;
+  --gain:#0B7F57; --gain-soft:#DCF2E9; --loss:#C0352B; --loss-soft:#FBE3E0;
+  --wa:#0B7F57; --wa-ink:#FFFFFF;
+  --font-display:'Space Grotesk',system-ui,sans-serif;
+  --font-body:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --font-num:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0D141B; --surface:#141D27; --surface2:#1B2733; --ink:#E7EEF5; --muted:#92A2B2; --line:#263441;
+    --accent:#7A9CFF; --accent-ink:#0D141B;
+    --gain:#3FD39B; --gain-soft:#13352A; --loss:#FF7468; --loss-soft:#3A1B19;
+    --wa:#3FD39B; --wa-ink:#0D141B;
+    color-scheme:dark;
+  }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 var(--font-body);
+  padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px)}
+.wrap{max-width:960px;margin:0 auto;padding-inline:16px}
+header.top{border-bottom:1px solid var(--line);background:var(--surface)}
+header.top .wrap{display:flex;justify-content:space-between;align-items:center;gap:12px;min-height:60px}
+.brand{font:700 20px/1 var(--font-display);letter-spacing:-.01em}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 18px;border-radius:8px;background:var(--wa);color:var(--wa-ink);font:600 15px var(--font-body);text-decoration:none}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.ticker{background:var(--surface);border-bottom:1px solid var(--line);min-height:78px}
+.hero{padding-block:40px 24px;display:flex;flex-direction:column;gap:16px}
+h1{margin:0;font:700 clamp(28px,6vw,44px)/1.1 var(--font-display);letter-spacing:-.02em;text-wrap:balance;max-width:20ch}
+h2{margin:0;font:700 22px/1.25 var(--font-display);text-wrap:balance}
+.lead{margin:0;color:var(--muted);max-width:60ch}
+.cta{display:flex;gap:12px;flex-wrap:wrap}
+section{padding-block:24px}
+.sec{display:flex;flex-direction:column;gap:14px}
+.sessions{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.sess{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:4px}
+.sess .n{font-weight:600}
+.sess .h{font:500 13px var(--font-num);color:var(--muted)}
+.chip{align-self:flex-start;padding:2px 10px;border-radius:999px;font:600 12px var(--font-body)}
+.chip.on{background:var(--gain-soft);color:var(--gain)}
+.chip.off{background:var(--surface2);color:var(--muted)}
+.clock{font:600 14px var(--font-num);color:var(--muted)}
+.tv{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.tv-chart{height:520px}
+.tv-cal{height:560px}
+.tradingview-widget-container,.tradingview-widget-container__widget{height:100%;width:100%}
+.credit{font-size:12px;color:var(--muted)}
+.credit a{color:var(--accent)}
+.contact{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:24px;display:flex;flex-direction:column;gap:14px}
+.num{font:600 20px var(--font-num)}
+footer{padding-block:24px 120px;color:var(--muted);font-size:13px}
+.float{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:max(16px,env(safe-area-inset-bottom,0px));z-index:10;box-shadow:0 4px 14px rgba(0,0,0,.25)}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <span class="brand">Forex en direct</span>
+    <a class="btn" href="#contact">Me contacter</a>
+  </div>
+</header>
+
+<div class="ticker" id="ticker" aria-label="Cours des principales paires en direct"></div>
+
+<main class="wrap">
+  <div class="hero">
+    <h1>Les marchés Forex, en direct.</h1>
+    <p class="lead">Suis les principales paires, le graphique et le calendrier économique au même endroit, sur téléphone comme sur ordinateur.</p>
+    <div class="cta">
+      <a class="btn" href="https://wa.me/237695982193?text=Bonjour%2C%20je%20veux%20en%20savoir%20plus%20sur%20le%20suivi%20personnel." target="_blank" rel="noopener">Écrire sur WhatsApp</a>
+      <a class="btn ghost" href="#graphique">Voir le graphique</a>
+    </div>
+  </div>
+
+  <section class="sec" aria-labelledby="h-sessions">
+    <h2 id="h-sessions">Sessions de marché</h2>
+    <p class="clock" id="clock" aria-live="off"></p>
+    <div class="sessions" id="sessions"></div>
+    <p class="credit">Une session est affichée ouverte du lundi au vendredi, de 8 h à 17 h heure locale de sa place financière.</p>
+  </section>
+
+  <section class="sec" id="graphique" aria-labelledby="h-chart">
+    <h2 id="h-chart">Graphique interactif</h2>
+    <div class="tv tv-chart" id="chart"></div>
+    <p class="credit">Graphiques et données : <a href="https://fr.tradingview.com/" target="_blank" rel="noopener">TradingView</a>. Selon la source, les cours peuvent être légèrement différés.</p>
+  </section>
+
+  <section class="sec" aria-labelledby="h-cal">
+    <h2 id="h-cal">Calendrier économique</h2>
+    <div class="tv tv-cal" id="calendar"></div>
+  </section>
+
+  <section class="sec" id="contact" aria-labelledby="h-contact">
+    <div class="contact">
+      <h2 id="h-contact">Une question ? Écris-moi.</h2>
+      <p class="lead">Suivi personnel de ton trading à 20 $ par mois. Écris-moi sur WhatsApp pour en savoir plus.</p>
+      <div class="num">+237 695 982 193</div>
+      <div class="cta"><a class="btn" href="https://wa.me/237695982193?text=Bonjour%2C%20je%20veux%20en%20savoir%20plus%20sur%20le%20suivi%20personnel." target="_blank" rel="noopener">Ouvrir WhatsApp</a></div>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap">
+  <p>Contenu à but informatif et éducatif, sans conseil d'investissement. Le trading sur le Forex comporte un risque élevé de perte en capital. Ne mise que ce que tu peux te permettre de perdre.</p>
+</footer>
+
+<a class="btn float" href="https://wa.me/237695982193?text=Bonjour%2C%20je%20veux%20en%20savoir%20plus%20sur%20le%20suivi%20personnel." target="_blank" rel="noopener" aria-label="Écrire sur WhatsApp">
+  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8.5 8.5 0 0 1-12.4 7.5L3 21l1.6-5.4A8.5 8.5 0 1 1 21 12z"/></svg>
+  WhatsApp
+</a>
+
+<script>
+(function(){
+  'use strict';
+  var theme=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+
+  /* Widgets TradingView : le script lit la configuration JSON placée dans la balise. */
+  function widget(hostId,file,config,wrapperClass){
+    var host=document.getElementById(hostId);if(!host)return;
+    var box=document.createElement('div');box.className='tradingview-widget-container';
+    var inner=document.createElement('div');inner.className='tradingview-widget-container__widget';
+    box.appendChild(inner);
+    var s=document.createElement('script');
+    s.src='https://s3.tradingview.com/external-embedding/'+file;
+    s.async=true;s.text=JSON.stringify(config);
+    box.appendChild(s);host.appendChild(box);
+  }
+  widget('ticker','embed-widget-ticker-tape.js',{
+    symbols:[
+      {proName:'FX:EURUSD',title:'EUR/USD'},{proName:'FX:GBPUSD',title:'GBP/USD'},{proName:'FX:USDJPY',title:'USD/JPY'},
+      {proName:'FX:USDCHF',title:'USD/CHF'},{proName:'FX:AUDUSD',title:'AUD/USD'},{proName:'FX:USDCAD',title:'USD/CAD'},
+      {proName:'OANDA:XAUUSD',title:'Or (XAU/USD)'}
+    ],
+    showSymbolLogo:true,colorTheme:theme,isTransparent:true,displayMode:'adaptive',locale:'fr'
+  });
+  widget('chart','embed-widget-advanced-chart.js',{
+    autosize:true,symbol:'FX:EURUSD',interval:'60',timezone:'Africa/Douala',theme:theme,style:'1',locale:'fr',
+    allow_symbol_change:true,hide_side_toolbar:false,support_host:'https://www.tradingview.com'
+  });
+  widget('calendar','embed-widget-events.js',{
+    colorTheme:theme,isTransparent:true,locale:'fr',width:'100%',height:'100%',
+    countryFilter:'us,eu,gb,jp,ch,au,ca',importanceFilter:'-1,0,1'
+  });
+
+  /* Sessions : l'heure locale de chaque place est calculée avec son fuseau, donc l'heure d'été est prise en compte. */
+  var SESS=[['Sydney','Australia/Sydney'],['Tokyo','Asia/Tokyo'],['Londres','Europe/London'],['New York','America/New_York']];
+  function parts(tz){
+    var f=new Intl.DateTimeFormat('en-GB',{timeZone:tz,weekday:'short',hour:'2-digit',minute:'2-digit',hour12:false});
+    var o={};f.formatToParts(new Date()).forEach(function(p){o[p.type]=p.value;});
+    return o;
+  }
+  function tick(){
+    var d=new Date();
+    var c=document.getElementById('clock');
+    c.textContent='Ton heure : '+d.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+    document.getElementById('sessions').innerHTML=SESS.map(function(s){
+      var p=parts(s[1]),h=parseInt(p.hour,10)%24,wd=p.weekday;
+      var on=['Mon','Tue','Wed','Thu','Fri'].indexOf(wd)>=0&&h>=8&&h<17;
+      return '<div class="sess"><span class="n">'+s[0]+'</span><span class="h">'+p.hour+':'+p.minute+' sur place</span><span class="chip '+(on?'on':'off')+'">'+(on?'Ouverte':'Fermée')+'</span></div>';
+    }).join('');
+  }
+  tick();setInterval(tick,1000);
+})();
+</script>
+</body>
+</html>
